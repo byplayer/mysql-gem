@@ -35,6 +35,9 @@ elsif mc = with_config('mysql-config', default_mysql_config_path) then
   cflags = `#{mc} --cflags`.chomp
   exit 1 if $? != 0
   libs = `#{mc} --libs`.chomp
+  if libs =~ /-L([^\s]+)/
+    libs += " -Wl,-R#{$1}"
+  end
   exit 1 if $? != 0
   $CPPFLAGS += ' ' + cflags
   $libs = libs + " " + $libs
